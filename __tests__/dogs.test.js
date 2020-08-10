@@ -68,9 +68,24 @@ describe('dogs routes', () => {
       });    
   });
 
+  it('it gets a dog by id with GET', () => {
+    return request(app)
+      .get(`/api/v1/dogs/${dog._id}`)
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: dog.id,
+          name: 'Leo',
+          breed: 'Black Lab',
+          temperament: 'Calm',
+          color: 'Black',
+          __v: 0
+        });
+      });
+  });
+
   it('it updates a dog with PATCH', () => {
     return request(app)
-      .patch(`/api/v1/dogs/${dog.id}`)
+      .patch(`/api/v1/dogs/${dog._id}`)
       .send({ temperament: 'Crazy' })
       .then(res => {
         expect(res.body).toEqual({
@@ -78,6 +93,21 @@ describe('dogs routes', () => {
           name: 'Leo',
           breed: 'Black Lab',
           temperament: 'Crazy',
+          color: 'Black',
+          __v: 0
+        });
+      });
+  });
+
+  it('it deletes a dog by id with DELETE', () => {
+    return request(app)
+      .delete(`/api/v1/dogs/${dog._id}`)
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: dog.id,
+          name: 'Leo',
+          breed: 'Black Lab',
+          temperament: 'Calm',
           color: 'Black',
           __v: 0
         });
