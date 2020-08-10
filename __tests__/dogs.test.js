@@ -13,6 +13,10 @@ describe('dogs routes', () => {
     return connect(uri);
   });
 
+  beforeEach(async() => {
+    return mongoose.connection.dropDatabase();
+  });
+
   let dog;
   beforeEach(async() => {
     dog = await Dog.create({
@@ -21,15 +25,12 @@ describe('dogs routes', () => {
       temperament: 'Calm',
       color: 'Black'
     });
-    return mongoose.connection.dropDatabase();
-    
   });
 
   afterAll(async() => {
     await mongoose.connection.close();
     return mongod.stop();
   });
-
 
   it('it creates a new Dog with POST', () => {
     return request(app)
@@ -52,14 +53,7 @@ describe('dogs routes', () => {
       });
   });
 
-  it('it gets a list of all dogs with GET', async() => {
-    await Dog.create({
-      name: 'Leo',
-      breed: 'Black Lab',
-      temperament: 'Calm',
-      color: 'Black'
-    });
-
+  it('it gets a list of all dogs with GET', () => {
     return request(app)
       .get('/api/v1/dogs')
       .then(res => {
@@ -72,7 +66,21 @@ describe('dogs routes', () => {
           __v: 0
         }]);
       });    
-
   });
 
+  it('it updates a dog with PATCH', () => {
+    return request(app)
+      .patch(`/api/v1/dogs/${dog.id}`)
+      .send({ temperament: 'Crazy' })
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: dog.id,
+          name: 'Leo',
+          breed: 'Black Lab',
+          temperament: 'Crazy',
+          color: 'Black',
+          __v: 0
+        });
+      });
+  });
 });
