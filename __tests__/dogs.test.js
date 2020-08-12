@@ -7,7 +7,6 @@ const User = require('../lib/models/User');
 
 const request = require('supertest');
 const app = require('../lib/app');
-const { findOne } = require('../lib/models/User');
 
 describe('dogs routes', () => {
   beforeAll(async() => {
@@ -22,7 +21,6 @@ describe('dogs routes', () => {
   let dog;
   const agent = request.agent(app);
   beforeEach(async() => {
-  
     const res = await agent
       .post('/api/v1/auth/signup')
       .send({
