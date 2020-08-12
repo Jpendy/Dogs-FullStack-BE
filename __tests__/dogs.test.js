@@ -28,6 +28,7 @@ describe('dogs routes', () => {
         password: 'password0'
       });
 
+    // eslint-disable-next-line no-unused-vars
     dog = await Dog.create({
       user: res.body._id,
       name: 'Leo',
